@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jejak Masyarakat Kuno: Eksplorasi Sosiologi Interaktif</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+            color: #334155; /* Dark slate text */
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 1rem; /* Rounded corners */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+        }
+        .btn {
+            background-color: #4f46e5; /* Indigo */
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem; /* Rounded corners */
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #4338ca; /* Darker indigo on hover */
+        }
+        .modal {
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black overlay */
+        }
+        .modal-content {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            max-height: 90vh; /* Max height for scrollability */
+            overflow-y: auto; /* Enable scrolling for long content */
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <header class="bg-gradient-to-r from-indigo-600 to-purple-700 text-white p-6 shadow-lg">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl font-bold mb-2">Jejak Masyarakat Kuno</h1>
+            <p class="text-xl">Eksplorasi Sosiologi Interaktif</p>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto p-6 flex flex-col items-center">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 w-full max-w-4xl">
+            <button id="btnMesopotamia" class="btn">Mesopotamia</button>
+            <button id="btnMesirKuno" class="btn">Mesir Kuno</button>
+            <button id="btnLembahIndus" class="btn">Lembah Indus</button>
+        </div>
+
+        <div id="civilizationDisplay" class="card p-8 w-full max-w-4xl text-center">
+            <h2 id="civilizationName" class="text-3xl font-bold mb-4 text-indigo-700">Pilih Peradaban untuk Memulai</h2>
+            <p id="civilizationDescription" class="text-lg mb-6 text-gray-700">Jelajahi struktur sosial, praktik budaya, dan perkembangan teknologi peradaban kuno, serta pelajari bagaimana sosiologi menjelaskan pengaruh lingkungan terhadap masyarakat.</p>
+            <img id="civilizationImage" src="https://placehold.co/600x300/e0e7ff/4f46e5?text=Pilih+Peradaban" alt="Pilih Peradaban" class="mx-auto rounded-lg shadow-md mb-6 w-full max-w-md">
+            <button id="btnLearnMore" class="btn hidden mx-auto">Pelajari Lebih Lanjut</button>
+        </div>
+    </main>
+
+    <!-- Modal for Detailed Information -->
+    <div id="infoModal" class="modal fixed inset-0 flex items-center justify-center z-50 hidden p-4">
+        <div class="modal-content p-8 max-w-3xl w-full">
+            <h3 id="modalTitle" class="text-3xl font-bold mb-4 text-indigo-700"></h3>
+            <div class="space-y-4 text-gray-700 text-lg">
+                <p><strong class="text-indigo-600">Struktur Sosial:</strong> <span id="modalSocialStructure"></span></p>
+                <p><strong class="text-indigo-600">Praktik Budaya:</strong> <span id="modalCulturalPractices"></span></p>
+                <p><strong class="text-indigo-600">Perkembangan Teknologi:</strong> <span id="modalTechnologicalDevelopments"></span></p>
+                <p><strong class="text-indigo-600">Teori Sosiologi:</strong> <span id="modalSociologicalTheories"></span></p>
+                <p><strong class="text-indigo-600">Pengaruh Lingkungan:</strong> <span id="modalEnvironmentalInfluence"></span></p>
+            </div>
+            <button id="btnCloseModal" class="btn mt-8">Tutup</button>
+        </div>
+    </div>
+
+    <footer class="bg-gray-800 text-white p-4 text-center mt-auto">
+        <p>&copy; 2025 Game Eksplorasi Sejarah Sosiologi</p>
+    </footer>
+
+    <script>
+        // Data untuk setiap peradaban
+        const civilizations = {
+            mesopotamia: {
+                name: "Mesopotamia",
+                description: "Dikenal sebagai 'tempat lahir peradaban', Mesopotamia adalah wilayah kuno di Asia Barat Daya yang terletak di antara sungai Tigris dan Efrat. Ini adalah rumah bagi beberapa peradaban paling awal di dunia, termasuk Sumeria, Akkadia, Babilonia, dan Asyur.",
+                image: "https://placehold.co/600x300/a78bfa/ffffff?text=Mesopotamia",
+                socialStructure: "Sangat hierarkis dengan raja, pendeta, juru tulis, pengrajin, petani, dan budak. Masyarakat diatur dalam negara-kota.",
+                culturalPractices: "Pengembangan tulisan paku (cuneiform), pembangunan ziggurat, agama politeistik, dan Kode Hammurabi yang terkenal.",
+                technologicalDevelopments: "Penemuan roda, sistem irigasi canggih, penggunaan perunggu, dan standarisasi berat serta ukuran.",
+                sociologicalTheories: "Menunjukkan bentuk awal stratifikasi sosial, munculnya negara sebagai entitas politik, dan pembagian kerja yang semakin kompleks.",
+                environmentalInfluence: "Sungai Tigris dan Efrat menyediakan air untuk irigasi yang subur ('Bulan Sabit Subur'), tetapi juga membawa banjir yang tidak terduga, mendorong pengembangan sistem pengelolaan air."
+            },
+            mesirKuno: {
+                name: "Mesir Kuno",
+                description: "Peradaban kuno yang berkembang di sepanjang lembah Sungai Nil di Afrika Timur Laut. Dikenal dengan firaun, piramida, dan warisan budayanya yang kaya.",
+                image: "https://placehold.co/600x300/6366f1/ffffff?text=Mesir+Kuno",
+                socialStructure: "Sistem yang sangat terpusat dengan Firaun di puncak, diikuti oleh wazir, pendeta, bangsawan, juru tulis, tentara, pengrajin, petani, dan budak.",
+                culturalPractices: "Hieroglif, pembangunan piramida dan kuil monumental, mumifikasi, dan agama politeistik dengan fokus kuat pada kehidupan setelah mati.",
+                technologicalDevelopments: "Penggunaan papirus untuk menulis, arsitektur monumental (piramida), kemajuan dalam kedokteran, dan pengembangan kalender surya.",
+                sociologicalTheories: "Contoh kuat kekuasaan terpusat, legitimasi kekuasaan melalui agama, dan kohesi sosial yang kuat melalui kepercayaan bersama dan proyek-proyek besar.",
+                environmentalInfluence: "Sungai Nil adalah sumber kehidupan, dengan banjir tahunan yang menyuburkan tanah untuk pertanian. Gurun di sekitarnya memberikan perlindungan alami dari invasi."
+            },
+            lembahIndus: {
+                name: "Peradaban Lembah Indus",
+                description: "Salah satu dari tiga peradaban awal Dunia Lama yang paling luas, terletak di wilayah yang sekarang menjadi Pakistan dan India Barat Laut. Dikenal dengan perencanaan kota yang canggih.",
+                image: "https://placehold.co/600x300/8b5cf6/ffffff?text=Lembah+Indus",
+                socialStructure: "Hirarki sosial kurang jelas dibandingkan peradaban lain, tetapi ada bukti perencanaan kota yang terorganisir dan kemungkinan kelas pedagang atau pendeta.",
+                culturalPractices: "Penggunaan aksara Indus (belum terpecahkan), perencanaan kota yang sangat canggih (tata letak grid, sistem drainase), dan penggunaan segel standar.",
+                technologicalDevelopments: "Sistem sanitasi dan drainase yang maju, ukuran batu bata yang seragam, penggunaan segel untuk perdagangan, dan pengukuran yang sangat presisi.",
+                sociologicalTheories: "Menunjukkan urbanisasi yang signifikan, bentuk awal pekerjaan umum, dan potensi egalitarianisme karena kurangnya bukti istana atau makam besar yang mencolok.",
+                environmentalInfluence: "Sungai Indus dan anak-anak sungainya menyediakan dataran subur untuk pertanian. Pola monsun mempengaruhi pertanian dan kehidupan masyarakat."
+            }
+        };
+
+        // Mendapatkan elemen DOM
+        const btnMesopotamia = document.getElementById('btnMesopotamia');
+        const btnMesirKuno = document.getElementById('btnMesirKuno');
+        const btnLembahIndus = document.getElementById('btnLembahIndus');
+        const civilizationName = document.getElementById('civilizationName');
+        const civilizationDescription = document.getElementById('civilizationDescription');
+        const civilizationImage = document.getElementById('civilizationImage');
+        const btnLearnMore = document.getElementById('btnLearnMore');
+        const infoModal = document.getElementById('infoModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalSocialStructure = document.getElementById('modalSocialStructure');
+        const modalCulturalPractices = document.getElementById('modalCulturalPractices');
+        const modalTechnologicalDevelopments = document.getElementById('modalTechnologicalDevelopments');
+        const modalSociologicalTheories = document.getElementById('modalSociologicalTheories');
+        const modalEnvironmentalInfluence = document.getElementById('modalEnvironmentalInfluence');
+        const btnCloseModal = document.getElementById('btnCloseModal');
+
+        let currentCivilization = null; // Untuk melacak peradaban yang sedang ditampilkan
+
+        // Fungsi untuk menampilkan detail peradaban
+        function displayCivilization(key) {
+            const civ = civilizations[key];
+            if (civ) {
+                civilizationName.textContent = civ.name;
+                civilizationDescription.textContent = civ.description;
+                civilizationImage.src = civ.image;
+                civilizationImage.alt = civ.name;
+                btnLearnMore.classList.remove('hidden'); // Tampilkan tombol 'Pelajari Lebih Lanjut'
+                currentCivilization = civ; // Set peradaban saat ini
+            }
+        }
+
+        // Event listener untuk tombol peradaban
+        btnMesopotamia.addEventListener('click', () => displayCivilization('mesopotamia'));
+        btnMesirKuno.addEventListener('click', () => displayCivilization('mesirKuno'));
+        btnLembahIndus.addEventListener('click', () => displayCivilization('lembahIndus'));
+
+        // Event listener untuk tombol 'Pelajari Lebih Lanjut'
+        btnLearnMore.addEventListener('click', () => {
+            if (currentCivilization) {
+                modalTitle.textContent = `Detail Sosiologis: ${currentCivilization.name}`;
+                modalSocialStructure.textContent = currentCivilization.socialStructure;
+                modalCulturalPractices.textContent = currentCivilization.culturalPractices;
+                modalTechnologicalDevelopments.textContent = currentCivilization.technologicalDevelopments;
+                modalSociologicalTheories.textContent = currentCivilization.sociologicalTheories;
+                modalEnvironmentalInfluence.textContent = currentCivilization.environmentalInfluence;
+                infoModal.classList.remove('hidden'); // Tampilkan modal
+            }
+        });
+
+        // Event listener untuk tombol 'Tutup' modal
+        btnCloseModal.addEventListener('click', () => {
+            infoModal.classList.add('hidden'); // Sembunyikan modal
+        });
+
+        // Sembunyikan modal jika mengklik di luar konten modal
+        infoModal.addEventListener('click', (event) => {
+            if (event.target === infoModal) {
+                infoModal.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
